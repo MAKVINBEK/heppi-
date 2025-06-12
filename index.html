@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Приглашение: День рождения Гульназ</title>
-    <!-- Подключение Google Fonts: Montserrat для текста и Lora для заголовков -->
+    <!-- Google Fonts: Montserrat для текста и Lora для заголовков -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Lora:wght@700&display=swap" rel="stylesheet">
+    <!-- tsParticles CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js" defer></script>
     <style>
         :root {
             --color-bg: #faf7f0;
@@ -17,16 +19,10 @@
             --animation-duration: 1s;
             --padding-horizontal: 5vw;
         }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        html {
-            font-size: 16px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 16px; }
         body {
-            background-color: var(--color-bg);
+            position: relative;
             font-family: 'Montserrat', sans-serif;
             color: var(--color-text);
             display: flex;
@@ -34,131 +30,70 @@
             align-items: center;
             min-height: 100vh;
             padding: 16px;
-            overflow-x: hidden;
+            overflow: hidden;
+            background: var(--color-bg);
         }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Контейнер для tsParticles */
+        #tsparticles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
         }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); }
+        /* Плавная смена градиента для body на случай отключения JS */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(45deg, #fdfbfb, #ebedee, #f5f0e1, #e8dfd5);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+            z-index: -3;
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
         .card {
             position: relative;
-            width: 100%;
-            max-width: 90vw;
+            width: 100%; max-width: 90vw;
             background-color: var(--color-card);
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 8px 24px rgba(0,0,0,0.1);
             animation: fadeInUp var(--animation-duration) ease-out;
             transition: transform 0.3s ease;
+            z-index: 1;
         }
-        .card:hover {
-            transform: translateY(-4px) scale(1.01);
-        }
-        .decor {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: float 5s ease-in-out infinite;
-            pointer-events: none;
-        }
-        .decor.one {
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle at center, var(--color-accent), transparent 70%);
-            top: -40px;
-            left: -20px;
-        }
-        .decor.two {
-            width: 180px;
-            height: 180px;
-            background: radial-gradient(circle at center, var(--color-secondary), transparent 70%);
-            bottom: -50px;
-            right: -30px;
-            animation-delay: 2s;
-        }
-        .decor.three {
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle at center, var(--color-primary), transparent 70%);
-            top: 30%;
-            right: -50px;
-            animation-delay: 4s;
-        }
-        .content {
-            position: relative;
-            z-index: 2;
-            padding: 32px var(--padding-horizontal);
-            text-align: center;
-        }
-        h1 {
-            font-family: 'Lora', serif;
-            font-size: clamp(1.75rem, 6vw, 2.75rem);
-            color: var(--color-primary);
-            margin-bottom: 8px;
-            animation: fadeInUp 0.8s ease-out;
-        }
-        .subtitle {
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            color: #555;
-            margin-bottom: 12px;
-            animation: fadeInUp 1s ease-out;
-        }
-        .message {
-            font-size: clamp(1rem, 4vw, 1.2rem);
-            margin-bottom: 12px;
-            line-height: 1.5;
-            animation: fadeInUp 1.2s ease-out;
-        }
-        .name {
-            font-family: 'Lora', serif;
-            font-size: clamp(1.5rem, 5vw, 2.25rem);
-            color: var(--color-secondary);
-            margin: 16px 0;
-            animation: pulse 4s ease-in-out infinite;
-        }
-        .details {
-            text-align: left;
-            margin-bottom: 20px;
-            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
-            animation: fadeInUp 1.4s ease-out;
-        }
-        .details p {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-        }
-        .details span.label {
-            font-weight: 500;
-            color: #555;
-        }
-        .details span.value {
-            color: var(--color-text);
-            text-align: right;
-        }
-        .footer {
-            font-size: clamp(0.85rem, 3vw, 1rem);
-            color: #777;
-            text-align: center;
-            padding-bottom: 16px;
-            animation: fadeInUp 1.6s ease-out;
-        }
-        /* Мобильная оптимизация */
-        @media (max-width: 480px) {
-            .content {
-                padding: 24px var(--padding-horizontal);
-            }
-        }
+        .card:hover { transform: translateY(-4px) scale(1.01); }
+        .decor { position: absolute; border-radius: 50%; opacity: 0.3; animation: float 5s ease-in-out infinite; pointer-events: none; }
+        .decor.one { width: 120px; height: 120px; background: radial-gradient(circle at center, var(--color-accent), transparent 70%); top: -40px; left: -20px; }
+        .decor.two { width: 180px; height: 180px; background: radial-gradient(circle at center, var(--color-secondary), transparent 70%); bottom: -50px; right: -30px; animation-delay: 2s; }
+        .decor.three { width: 100px; height: 100px; background: radial-gradient(circle at center, var(--color-primary), transparent 70%); top: 30%; right: -50px; animation-delay: 4s; }
+        .content { position: relative; z-index: 2; padding: 32px var(--padding-horizontal); text-align: center; }
+        h1 { font-family: 'Lora', serif; font-size: clamp(1.75rem,6vw,2.75rem); color: var(--color-primary); margin-bottom: 8px; animation: fadeInUp 0.8s ease-out; }
+        .subtitle { font-size: clamp(0.9rem,3vw,1.1rem); color: #555; margin-bottom: 12px; animation: fadeInUp 1s ease-out; }
+        .message { font-size: clamp(1rem,4vw,1.2rem); margin-bottom: 12px; line-height:1.5; animation: fadeInUp 1.2s ease-out; }
+        .name { font-family: 'Lora', serif; font-size: clamp(1.5rem,5vw,2.25rem); color: var(--color-secondary); margin: 16px 0; animation: pulse 4s ease-in-out infinite; }
+        .details { text-align:left; margin-bottom:20px; font-size: clamp(0.95rem,3.5vw,1.1rem); animation: fadeInUp 1.4s ease-out; }
+        .details p { display:flex; justify-content:space-between; margin-bottom:6px; }
+        .details span.label { font-weight:500; color:#555; }
+        .details span.value { color: var(--color-text); text-align:right; }
+        .footer { font-size: clamp(0.85rem,3vw,1rem); color:#777; text-align:center; padding-bottom:16px; animation: fadeInUp 1.6s ease-out; }
+        @media (max-width: 480px) { .content { padding: 24px var(--padding-horizontal); } }
     </style>
 </head>
 <body>
+    <!-- Контейнер tsParticles -->
+    <div id="tsparticles"></div>
     <div class="card">
         <div class="decor one"></div>
         <div class="decor two"></div>
@@ -177,5 +112,32 @@
             <p class="footer">Будем рады видеть Вас среди гостей. Пожалуйста, сообщите о своём присутствии удобным способом.</p>
         </div>
     </div>
+    <!-- Инициализация tsParticles -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            tsParticles.load('tsparticles', {
+                fpsLimit: 60,
+                particles: {
+                    number: { value: 50, density: { enable: true, area: 800 } },
+                    color: { value: ["#8B4B4B","#6A7B6A","#C97B5C"] },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.4, random: { enable: true, minimumValue: 0.2 } },
+                    size: { value: { min: 1, max: 4 } },
+                    move: { enable: true, speed: 0.5, direction: 'none', random: true, straight: false, outModes: { default: 'out' } }
+                },
+                interactivity: {
+                    events: {
+                        onHover: { enable: true, mode: 'repulse' },
+                        onClick: { enable: true, mode: 'push' }
+                    },
+                    modes: {
+                        repulse: { distance: 100, duration: 0.4 },
+                        push: { quantity: 4 }
+                    }
+                },
+                detectRetina: true
+            });
+        });
+    </script>
 </body>
 </html>
